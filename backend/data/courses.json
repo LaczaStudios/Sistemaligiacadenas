@@ -1,0 +1,83 @@
+{
+    "1": {
+        "year": "Primer Año",
+        "sections": {
+            "1a": {
+                "name": "Sección A",
+                "link": "https://script.google.com/macros/s/AKfycbzduyectJfP35i2orIzK-5HrVsfawxWCzu-7ojZBh1l1hhGic7UCjdls6p7XQ_5ExEa/exec"
+            },
+            "1b": {
+                "name": "Sección B",
+                "link": "https://script.google.com/macros/s/AKfycbx-_-94J7eza1Y90YudyWVr3C5crfjtN7Di7WyjlKEW9bnN-NFcH5Kwq_LqXD8z9Xmb/exec"
+            },
+            "1c": {
+                "name": "Sección C",
+                "link": "https://script.google.com/macros/s/AKfycbyKa3gp2tygbp_05-_rBHJjoUGG9bjC0L7wnSNU6Sp1ry9dqHRCrQEujzI6t4f_8jX2EA/exec"
+            }
+        }
+    },
+    "2": {
+        "year": "Segundo Año",
+        "sections": {
+            "2a": {
+                "name": "Sección A",
+                "link": "https://script.google.com/macros/s/AKfycbzwwfuvggI_apah7WPJAak2Wzij4LKsRxGST5T44AlLXYZ_TOVjiVofXKizXJwNOWLs/exec"
+            },
+            "2b": {
+                "name": "Sección B",
+                "link": "https://script.google.com/macros/s/AKfycbzpfW3iJkHa9ZfIoUhXZwSEBVKqOq0fVg6tAPhEyB0Q_ZwhLCU37V_DrmpjF2Vz0jDF8w/exec"
+            },
+            "2c": {
+                "name": "Sección C",
+                "link": "https://script.google.com/macros/s/AKfycbyJJkoWpGB2DeOoeJkbb0L0XbdaMNLl3Fa-EVYCE7ToOhO3TJMSu5_4ThLqMiKNHzG6Mw/exec"
+            }
+        }
+    },
+    "3": {
+        "year": "Tercer Año",
+        "sections": {
+            "3a": {
+                "name": "Sección A",
+                "link": "https://script.google.com/macros/s/AKfycbzHt0TBz-v3IGcjb5puToBkFqL8prQ-TU3QkXrZfHGjv-XFSaUrTQFfMLkG3YNaeq8t/exec"
+            },
+            "3b": {
+                "name": "Sección B",
+                "link": "https://script.google.com/macros/s/AKfycbwaHhOlKiRmXSsKeWSws10rgKx3OXAyGwPu9TJrOCacYzPGc7Tb68bEVguqOf7bEt_R/exec"
+            },
+            "3c": {
+                "name": "Sección C",
+                "link": "https://script.google.com/macros/s/AKfycbyuCA4X4e3Aos23dMujtUpeCWD_Qr35G8HUSG_OYiGvCvdGaVNfZChX98DL2rCUV54PQw/exec"
+            }
+        }
+    },
+    "4": {
+        "year": "Cuarto Año",
+        "sections": {
+            "4a": {
+                "name": "Sección A",
+                "link": "https://script.google.com/macros/s/AKfycbzFPGpmZgLeUhjFOu71q5YYeaEmvlT6aQdzGjIvzQGiMB7soOxHoAlrZz6lAKT_oY23Hw/exec"
+            },
+            "4b": {
+                "name": "Sección B",
+                "link": "https://script.google.com/macros/s/AKfycbxRtX3ZTswKf7Zc9_zvW0NZdZEIaL09JlOZSMC6obaMAZag2VWrRJ-2ZOiTdVgIzLcZ/exec"
+            },
+            "4c": {
+                "name": "Sección C",
+                "link": "https://script.google.com/macros/s/AKfycbzbkTZSzFF9VWBEccY8H1xSQjApaouQeJkn2BlKv98Lf4J-v5IyzcOaYj1NW0CgJ80XDQ/exec"
+            }
+        }
+    },
+    "5": {
+        "year": "Quinto Año",
+        "sections": {
+            "5a": {
+                "name": "Sección A",
+                "link": "https://script.google.com/macros/s/AKfycbzUXyDBDj-jWVd0A7GolmVN1jxOsHeyF8NNKBE-QkG4KMGU39BV8cRTm9eepcDZgSsm1g/exec"
+            },
+            "5b": {
+                "name": "Sección B",
+                "link": "https://script.google.com/macros/s/AKfycbyvkViIfSAddetH5Z7M2TGRhn4Ip1BIC50vtPEJR_UDaVWISrpKMADrLS5DprJM0oot/exec"
+            }
+        }
+    }
+}

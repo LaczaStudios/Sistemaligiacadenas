@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema - Plataforma de Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+   <style>
+    /* --- 1. VARIABLES GLOBALES (MICROSOFT INSPIRED REFINADO) --- */
+    :root {
+        --ms-blue: #0063B1; 
+        --ms-blue-hover: #004D8C; 
+        --ms-blue-active: #0078D4; 
+        --ms-blue-light: #e5f1fa; 
+        
+        --ms-gray-light: #f8f8f8; 
+        --ms-gray-border: #a19f9d; 
+        
+        --ms-text-dark: #201f1e; 
+        --ms-text-light: #605e5c; 
+        
+        --ms-red: #C50F1F; 
+        
+        --card-background: #ffffff;
+        
+        --shadow-subtle: 0 6px 16px rgba(0, 0, 0, 0.08);
+        --border-radius-soft: 2px;
+    }
+
+    /* --- 2. BASE: BODY, TIPOGRAFÍA y LAYOUT GENERAL --- */
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        margin: 0; 
+        background-color: #ffffff; 
+        color: var(--ms-text-dark); 
+        line-height: 1.5;
+        font-size: 15px;
+        min-height: 100vh;
+        box-sizing: border-box; 
+        /* Centrar contenido como en un login de MS */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    a {
+        text-decoration: none;
+        color: var(--ms-blue);
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    a:hover {
+        color: var(--ms-blue-hover);
+    }
+    
+    /* --- 3. ESTILO DEL CONTENEDOR (Login Card) --- */
+    .login-box { 
+        background-color: var(--card-background);
+        padding: 40px; 
+        border-radius: var(--border-radius-soft); 
+        box-shadow: var(--shadow-subtle); 
+        max-width: 440px; 
+        width: 100%;
+        margin: auto; 
+        border: 1px solid var(--ms-gray-border);
+        text-align: left; 
+    }
+
+    .login-box h2 {
+        font-size: 1.5em; 
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: var(--ms-text-dark); /* Título Principal */
+        text-align: left;
+    }
+
+    /* Estilo de Inputs y Select (Borde inferior MS) */
+    input[type="text"], input[type="email"], input[type="password"], select {
+        width: 100%;
+        padding: 10px 0; 
+        border: none;
+        border-bottom: 1px solid var(--ms-text-dark); 
+        box-sizing: border-box;
+        font-size: 1em;
+        background-color: transparent;
+        transition: border-bottom-color 0.2s;
+        margin-top: 5px; 
+    }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
+        border-bottom: 2px solid var(--ms-blue); 
+        outline: none;
+    }
+
+    /* Ocultar etiquetas (Estilo MS) */
+    label {
+        display: none; 
+    }
+    
+    /* BOTÓN PRINCIPAL (Azul, Alineado a la derecha, Mejorado) */
+    .btn-primary {
+        background-color: var(--ms-blue); 
+        color: white;
+        padding: 10px 30px; 
+        border: none;
+        border-radius: var(--border-radius-soft); 
+        cursor: pointer;
+        font-size: 1em; 
+        font-weight: 600; 
+        width: auto; 
+        float: right; /* Alineado a la derecha */
+        margin-top: 20px;
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: var(--ms-blue-hover);
+    }
+    
+    .footer-links {
+        clear: both; 
+        padding-top: 50px; 
+        text-align: left;
+        font-size: 0.9em;
+    }
+    .footer-links p { margin: 0; }
+
+    /* Mensajes de feedback */
+    .message-box {
+        padding: 10px;
+        margin-bottom: 15px;
+        font-weight: 400;
+        display: none;
+        text-align: left;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .message-box.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+        display: block; /* Mostrar solo cuando se activa con JS */
+    }
+    
+    /* Contenedor para manejar el float del botón */
+    .form-controls {
+        overflow: auto; 
+        margin-top: 30px;
+    }
+    
+    /* Opcional: Estilos para el login de docente (link inferior) */
+    .secondary-link {
+        font-size: 0.9em; 
+        color: var(--ms-text-light);
+        float: left;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>Acceso al Sistema (Administrativo/General)</h2>
+
+        <div id="loginMessage" class="message-box" style="display: none;"></div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" placeholder="Correo electrónico" name="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" placeholder="Contraseña" name="password" id="password" required>
+            </div>
+            
+            <div class="form-controls">
+                <p class="secondary-link">
+                    ¿Eres docente sin contraseña? <a href="login.html">Accede aquí</a>
+                </p>
+                <button type="submit" class="btn-primary">Acceder</button>
+            </div>
+            
+        </form>
+        
+        <div class="footer-links">
+            <p>Este sistema está protegido. Solo usuarios autorizados deben iniciar sesión.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const loginMessage = document.getElementById('loginMessage');
+            // Usamos la API de JWT para el login de email/password
+            const API_URL = 'http://localhost:5000/api/auth/login';
+
+            // Opcional: Si ya hay un token, redirigir inmediatamente
+            if (localStorage.getItem('token')) {
+                // Redirigir al perfil si el token existe
+                window.location.href = 'perfil.html'; 
+                return; 
+            }
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                loginMessage.style.display = 'block';
+                loginMessage.classList.remove('error');
+                loginMessage.textContent = 'Iniciando sesión...';
+                loginMessage.style.color = 'blue';
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    const data = await response.json();
+
+                    // Limpiamos los estilos de mensaje previos
+                    loginMessage.style.color = '';
+
+                    if (response.ok) {
+                        // 1. Guardar el token
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('role', data.role); 
+                        
+                        loginMessage.textContent = `Login exitoso. Rol: ${data.role.toUpperCase()}. Redirigiendo...`;
+                        loginMessage.style.color = 'green';
+                        
+                        // 2. Redirección a profile.html (la página principal del sistema)
+                        setTimeout(() => {
+                            window.location.href = 'perfil.html'; 
+                        }, 50);
+
+                    } else {
+                        loginMessage.textContent = data.message || 'Credenciales incorrectas.';
+                        loginMessage.classList.add('error');
+                    }
+                } catch (error) {
+                    loginMessage.textContent = 'Error de conexión con el servidor.';
+                    loginMessage.classList.add('error');
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

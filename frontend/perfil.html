@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Docente - Plataforma de Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        
+    /* --- 1. VARIABLES GLOBALES (MICROSOFT INSPIRED REFINADO) --- */
+    :root {
+        --ms-blue: #0078D4; /* Azul Primario de Microsoft */
+        --ms-blue-hover: #005a9e; /* Azul más oscuro para hover */
+        --ms-blue-light: #eff6fc; /* Fondo claro para items activos/hover */
+        --ms-gray-light: #f3f2f1; /* Color de fondo principal (cuerpo) */
+        --ms-gray-border: #edebe9; /* Color de borde y separadores */
+        --ms-text-dark: #323130; /* Texto oscuro principal */
+        --ms-text-light: #605e5c; /* Texto secundario (gris) */
+        --ms-red: #D13438; /* Rojo - Usado para alertar/admin */
+        --card-background: #ffffff;
+        /* Sombra mejorada para un efecto más flotante */
+        --shadow-elevated: 0 8px 16px rgba(0, 0, 0, 0.1); 
+    }
+
+    /* --- 2. BASE: BODY, TIPOGRAFÍA Y ENLACES --- */
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        margin: 0; 
+        background-color: var(--ms-gray-light); 
+        color: var(--ms-text-dark); 
+        line-height: 1.6;
+        font-size: 15px; 
+        min-height: 100vh;
+        display: flex; 
+        flex-direction: column;
+    }
+    
+    a {
+        text-decoration: none;
+        color: var(--ms-blue);
+        transition: color 0.2s;
+    }
+    a:hover {
+        color: var(--ms-blue-hover);
+    }
+    
+    .main-layout { 
+        display: flex; 
+        flex-grow: 1; 
+    }
+
+    /* --- 3. LAYOUT PRINCIPAL (HEADER) --- */
+    
+    .header { 
+        background-color: var(--card-background);
+        height: 60px; 
+        padding: 0 25px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        border-bottom: 1px solid var(--ms-gray-border);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        flex-shrink: 0;
+    }
+    .header h3 { 
+        margin: 0; 
+        font-size: 1.2em; 
+        font-weight: 700; 
+        color: var(--ms-blue); 
+    }
+    .user-menu { display: flex; align-items: center; gap: 10px; }
+    
+    .profile-info { 
+        padding: 8px 10px; border-radius: 4px;
+        transition: background-color 0.2s; 
+        text-align: right;
+    }
+    .profile-info:hover { background-color: var(--ms-gray-border); }
+    .profile-text { display: block; font-weight: 400; color: var(--ms-text-light); font-size: 0.8em; line-height: 1;}
+    .profile-name { font-weight: 600; color: var(--ms-text-dark); font-size: 0.95em; line-height: 1.2;}
+    
+    .user-menu a#logoutButton, .user-menu a.admin {
+        font-weight: 500; padding: 8px 12px; border-radius: 4px;
+        color: var(--ms-text-dark);
+        display: flex; align-items: center; gap: 5px;
+        white-space: nowrap; 
+    }
+    .user-menu a#logoutButton:hover, .user-menu a.admin:hover {
+        background-color: var(--ms-gray-border);
+    }
+    
+    /* --- 4. CONTENIDO PRINCIPAL --- */
+    
+    .content-area {
+        flex-grow: 1;
+        padding: 40px;
+        overflow-y: auto;
+    }
+    
+    .profile-card {
+        background-color: var(--card-background);
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: var(--shadow-elevated); 
+        border: 1px solid var(--ms-gray-border);
+        margin: 0 auto;
+        max-width: 900px; 
+    }
+
+    .section-title-profile { 
+        color: var(--ms-blue);
+        font-size: 1.6em;
+        font-weight: 700;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--ms-blue-light); 
+        padding-bottom: 10px;
+        display: flex; align-items: center;
+    }
+    .section-title-profile i { margin-right: 10px; color: var(--ms-blue); font-size: 1.1em; }
+    .section-title-profile:first-child { margin-top: 0; }
+
+    /* Detalle de Docente (Card interior) */
+    .profile-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid var(--ms-gray-border);
+        border-radius: 6px;
+        background-color: var(--ms-blue-light); 
+    }
+    .detail-item {
+        display: flex;
+        align-items: center;
+        line-height: 1.4;
+        font-size: 1em;
+        color: var(--ms-text-dark);
+    }
+    .detail-item i { margin-right: 10px; color: var(--ms-blue); font-size: 1.1em; }
+    .detail-item strong {
+        display: inline-block;
+        width: 100px; 
+        font-weight: 600;
+        color: var(--ms-text-dark);
+        margin-right: 5px;
+    }
+    
+    /* Cursos Agrupados (Listas) */
+    .course-group {
+        margin-bottom: 30px;
+        border-left: 5px solid var(--ms-blue); 
+        padding: 15px 0 15px 0; 
+        background-color: var(--card-background);
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .course-group-title {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: var(--ms-text-dark);
+        margin-bottom: 10px;
+        padding: 0 20px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    
+    .course-list-main {
+        list-style: none;
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    .course-list-main li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ms-gray-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95em;
+        font-weight: 500;
+        flex-wrap: wrap; 
+        gap: 10px; 
+    }
+    .course-list-main li:last-child { border-bottom: none; padding-bottom: 0; }
+
+    /* Estilo de Botón Primario (Aplicado a Registrar Notas y Botones Admin) */
+    .btn-primary {
+        background-color: var(--ms-blue);
+        color: white;
+        padding: 10px 20px; 
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em; 
+        font-weight: 600;
+        transition: background-color 0.2s, transform 0.1s;
+        display: block;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .btn-primary:hover {
+        background-color: var(--ms-blue-hover);
+        transform: translateY(-1px);
+    }
+
+    .course-list-main a {
+        /* Estilos específicos para los botones dentro de la lista de cursos */
+        font-weight: 600;
+        padding: 8px 15px; /* Ajuste para que se vea mejor en la lista */
+        background-color: var(--ms-blue);
+        color: white;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    /* --- 5. OPCIONES DE ADMINISTRACIÓN --- */
+
+    .admin-options {
+        margin-top: 40px; 
+        border-top: 1px solid var(--ms-gray-border);
+        padding-top: 20px;
+    }
+    .admin-buttons-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap; 
+    }
+    /* Estilos específicos para los botones dentro del contenedor de administración */
+    .admin-buttons-container .btn-primary {
+        width: auto;
+        margin-top: 0;
+        padding: 12px 20px; /* Un poco más grandes que los de la lista de cursos */
+        display: inline-block; /* Permite que estén en línea con el flexbox */
+        max-width: 300px;
+        white-space: nowrap; /* Evita que el texto del botón se rompa */
+    }
+
+
+    /* --- 6. MEDIA QUERY: VISTA DE ESCRITORIO (>= 768px) --- */
+    @media (min-width: 768px) {
+        .profile-details {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .detail-item strong {
+            width: 100px; 
+        }
+        
+        .course-list-main li {
+            flex-wrap: nowrap; 
+            gap: 0;
+        }
+        
+        .admin-options .btn-primary {
+            width: auto;
+            margin: 10px 0;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+    <div class="header">
+        <h3><i class="fas fa-school"></i> Plataforma Docente</h3>
+        <div class="user-menu">
+            
+            <div class="profile-info">
+                <span class="profile-text">Bienvenido(a):</span>
+                <span id="welcomeMessage" class="profile-name"></span>
+            </div>
+            
+            <a href="admin-registro.html" id="adminLink" class="admin" style="display:none;" title="Registrar Nuevo Usuario"><i class="fas fa-user-shield"></i> Registrar Usuario</a>
+            
+            <a href="#" id="logoutButton" title="Cerrar sesión de forma segura"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area" id="main-content">
+            
+            <div class="profile-card">
+                
+                <h2 class="section-title-profile"><i class="fas fa-id-card"></i> Información del Docente</h2>
+                
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <i class="fas fa-user"></i>
+                        <strong>Nombre:</strong> <span id="profileName">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <strong>Correo:</strong> <span id="profileEmail">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-briefcase"></i>
+                        <strong>Rol:</strong> <span id="profileRole">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                      <i class="fas fa-file-alt">
+                         </i> <a href="https://script.google.com/macros/s/AKfycbzj0UkBbaAGYxTNk8PY04ddAfhPQ5mtqd_5Cm8BJGpGpnfl733kqh_1xBV_ZzyBLHNC_g/exec" target="_blank" title="Generar reporte de notas en una nueva pestaña"> Generar Reporte de Notas</a>
+                   </div>
+                </div>
+
+                <h2 class="section-title-profile"><i class="fas fa-book-open"></i> Cursos Asignados</h2>
+                <div id="courseContentArea">
+                    <p class="loading-message" style="color:var(--ms-text-light); font-style: italic; padding: 10px 0;">Cargando cursos asignados...</p>
+                </div>
+                
+                <div id="adminLinksContainer" class="admin-options" style="display: none;">
+                    <h2 class="section-title-profile" style="color: var(--ms-red); border-bottom-color: var(--ms-red);"><i class="fas fa-user-cog" style="color: var(--ms-red);"></i> Opciones de Administración</h2>
+                    <p style="margin-bottom: 15px; color: var(--ms-text-dark);">Desde aquí puede gestionar las cuentas de usuario, los enlaces y las asignaciones.</p>
+                    
+                    <div class="admin-buttons-container">
+                        <a href="admin-registro.html" class="btn-primary">Registrar Nuevo Usuario</a>
+                        <a href="admin-cursos.html" class="btn-primary">Gestionar Enlaces</a>
+                        <a href="admin-usuarios.html" class="btn-primary">Asignar Cursos a Docentes</a> 
+                        
+                        <a href="admin-toggle-courses.html" class="btn-primary" style="background-color: #0078D4;">Habilitar/Deshabilitar Cursos</a>
+                        
+                        <a href="https://script.google.com/macros/s/AKfycbzlQPMViJCojNtCE32deDLaNn_Xmy3r9rJfadkH4lPpsjUpleWx7bxrSmAFJMgkWRYd/exec" target="_blank" class="btn-primary">Traslado de Estudiantes</a>
+                        <a href="https://script.google.com/macros/s/AKfycbz_IXc-lFh4EX-UoShnDjxhGEWBq-SdR_LBS6zsXvjieiWk_vxc_PmASjj4d0yYuuzl/exec" target="_blank" class="btn-primary">Registro de Estudiantes</a>
+                        <a href="https://script.google.com/macros/s/AKfycbxsTCW7CXdTsM9sGI75vaFFOIKaDx3EaT6S-7kUzasaxLmZmbArZv-KiDkCH-rKH8_F6A/exec" target="_blank" class="btn-primary">Nóminas Para Notas</a>
+                        <a href="https://script.google.com/macros/s/AKfycbz2NyAsmQjVhAnRCJSMNqBFhNnsmcInLdh8veiAXuGUdz1NE5CMZ0q4xMBilDGhoHM/exec" target="_blank" class="btn-primary">Nóminas por Grado y Sección</a> 
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        
+        const API_URL_PROFILE = 'http://localhost:5000/api/auth/profile';
+        const API_URL_COURSES = 'http://localhost:5000/api/courses';
+        
+        // --- 1. LÓGICA DE RENDERIZADO DE CURSOS ---
+        function generateProfileCourseList(assignedCourseKeys, allCoursesData) {
+            const courseContentArea = document.getElementById('courseContentArea');
+            courseContentArea.innerHTML = ''; 
+
+            if (!assignedCourseKeys || assignedCourseKeys.length === 0) {
+                courseContentArea.innerHTML = '<p style="color:var(--ms-text-light); font-style: italic; padding: 10px 0;">No tienes cursos asignados actualmente. Contacta al administrador.</p>';
+                return;
+            }
+
+            let htmlContent = '';
+            
+            const groupedCourses = {};
+            
+            for (const yearKey in allCoursesData) {
+                const yearData = allCoursesData[yearKey];
+                
+                for (const sectionKey in yearData.sections) {
+                    if (assignedCourseKeys.includes(sectionKey)) {
+                        
+                        const course = yearData.sections[sectionKey];
+                        const yearTitle = yearData.year;
+                        
+                        if (!groupedCourses[yearKey]) {
+                            groupedCourses[yearKey] = {
+                                title: yearTitle,
+                                sections: []
+                            };
+                        }
+                        
+                        groupedCourses[yearKey].sections.push({
+                            name: `Sección ${course.name}`,
+                            link: course.link 
+                        });
+                    }
+                }
+            }
+
+            // Generar el HTML final agrupado
+            for (const yearKey in groupedCourses) {
+                const group = groupedCourses[yearKey];
+                
+                htmlContent += `<div class="course-group">
+                    <div class="course-group-title"><i class="fas fa-graduation-cap"></i> ${group.title}</div>
+                    <ul class="course-list-main">`;
+                
+                group.sections.forEach(section => {
+                    htmlContent += `
+                        <li>
+                            <span><i class="fas fa-chevron-right" style="font-size: 0.8em; color: var(--ms-blue-hover); margin-right: 5px;"></i> ${section.name}</span>
+                            <a href="${section.link}" class="btn-primary" target="_blank" title="Abrir enlace de ${section.name}">Registrar Notas</a>
+                        </li>
+                    `;
+                });
+                
+                htmlContent += `</ul></div>`;
+            }
+
+            courseContentArea.innerHTML = htmlContent;
+        }
+
+        // --- 2. LÓGICA DE AUTENTICACIÓN Y PERFIL (USANDO JWT) ---
+        async function fetchProfileData() {
+            const token = localStorage.getItem('token');
+            const adminLinkHeader = document.getElementById('adminLink');
+            const adminLinksContainer = document.getElementById('adminLinksContainer');
+            
+            // 1. Verificar Token
+            if (!token) {
+                alert('Sesión no iniciada. Redirigiendo al login.');
+                localStorage.clear();
+                window.location.href = "index.html"; 
+                return;
+            }
+
+            // 2. Obtener datos del perfil y datos de cursos en paralelo
+            try {
+                const headers = { 'Authorization': `Bearer ${token}` };
+
+                // A. Perfil (incluye el array de cursos asignados)
+                const profileResponse = await fetch(API_URL_PROFILE, { method: 'GET', headers });
+                const profileData = await profileResponse.json();
+
+                // B. Estructura completa de Cursos 
+                const coursesResponse = await fetch(API_URL_COURSES, { method: 'GET', headers });
+                const coursesData = await coursesResponse.json();
+
+                if (!profileResponse.ok) {
+                    throw new Error(profileData.message || 'Error de autenticación.');
+                }
+                if (!coursesResponse.ok) {
+                    console.error('No se pudo cargar la estructura de cursos.', coursesData);
+                }
+
+                // 3. Renderizar Datos Personales
+                document.getElementById('welcomeMessage').textContent = profileData.name; 
+                document.getElementById('profileName').textContent = profileData.name; 
+                document.getElementById('profileEmail').textContent = profileData.email || 'No disponible';
+                
+                // Renderizar Rol
+                const roleSpan = document.getElementById('profileRole');
+                roleSpan.textContent = profileData.role ? profileData.role.toUpperCase() : 'USUARIO';
+                roleSpan.style.color = profileData.role === 'admin' ? 'var(--ms-red)' : 'var(--ms-blue)';
+                roleSpan.style.fontWeight = '700';
+                
+                // 4. Habilitar opciones de Administrador
+                if (profileData.role === 'admin') {
+                    if(adminLinksContainer) adminLinksContainer.style.display = 'block';
+                    if(adminLinkHeader) adminLinkHeader.style.display = 'inline-block';
+                } else {
+                    if(adminLinksContainer) adminLinksContainer.style.display = 'none';
+                    if(adminLinkHeader) adminLinkHeader.style.display = 'none';
+                }
+                
+                // 5. Generar lista de Cursos Asignados
+                const assignedCourses = profileData.courses || [];
+                generateProfileCourseList(assignedCourses, coursesData);
+
+            } catch (error) {
+                console.error('Error al cargar perfil:', error);
+                alert("Sesión expirada o error de autenticación. Redirigiendo al login.");
+                localStorage.clear();
+                window.location.href = "index.html"; 
+            }
+        }
+
+
+        // *** 3. EVENT LISTENERS Y LÓGICA DE SESIÓN ***
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            fetchProfileData();
+
+            // Cierre de Sesión (Función global de Logout)
+            document.getElementById('logoutButton').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = "index.html"; // Redirigir al login principal
+            });
+        });
+    </script>
+</body>
+</html>

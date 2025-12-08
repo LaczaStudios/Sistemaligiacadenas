@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cursos y Enlaces - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; background-color: #f4f4f4; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 80%; max-width: 900px; margin-top: 20px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .back-link { display: block; text-align: center; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
+        .year-section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 6px; background-color: #f9f9f9; }
+        .year-section h3 { margin-top: 0; color: #0078D4; }
+        .section-item { margin-bottom: 15px; }
+        .section-item label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .section-item input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #0078D4; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; width: 100%; }
+        button:hover { background-color: #005a9e; }
+        #message { margin-top: 15px; text-align: center; font-weight: bold; }
+        .loading { text-align: center; padding: 50px; }
+        .back-admin { margin-top: 15px; text-align: center; }
+        .back-admin a { color: #5cb85c; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="perfil.html" class="back-link">&lt; Volver al Perfil</a>
+    <h2>Gestión de Enlaces de Cursos (Admin)</h2>
+    
+    <div id="loading" class="loading">Cargando datos de cursos...</div>
+    <div id="error" class="message" style="color: red; display: none;"></div>
+
+    <form id="courseForm" style="display:none;">
+        <div id="coursesContainer">
+            </div>
+
+        <button type="submit">Guardar Enlaces Actualizados</button>
+    </form>
+    
+    <div id="message"></div>
+    
+    <div class="back-admin">
+        <a href="admin-registro.html">Ir a Registro de Usuarios</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('courseForm');
+        const messageDiv = document.getElementById('message');
+        const coursesContainer = document.getElementById('coursesContainer');
+        const loadingDiv = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+        
+        const API_URL_GET = 'http://localhost:5000/api/courses';
+        const API_URL_UPDATE = 'http://localhost:5000/api/courses';
+
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+
+        // 1. Verificación de Seguridad (Token y Rol)
+        if (!token || role !== 'admin') {
+            alert('Acceso denegado. Solo administradores.');
+            window.location.href = 'perfil.html';
+            return;
+        }
+
+        let currentCoursesData = {}; 
+
+        function renderCourses(courses) {
+            currentCoursesData = courses;
+            coursesContainer.innerHTML = '';
+            
+            for (const yearKey in courses) {
+                const yearData = courses[yearKey];
+                let sectionsHtml = '';
+                
+                for (const sectionKey in yearData.sections) {
+                    const sectionData = yearData.sections[sectionKey];
+                    // El campo URL es editable
+                    sectionsHtml += `
+                        <div class="section-item">
+                            <label for="${sectionKey}">${yearData.year} - ${sectionData.name} (Clave: ${sectionKey})</label>
+                            <input type="url" id="${sectionKey}" value="${sectionData.url}" data-year="${yearKey}" data-section-key="${sectionKey}" required>
+                        </div>
+                    `;
+                }
+
+                coursesContainer.innerHTML += `
+                    <div class="year-section">
+                        <h3>${yearData.year}</h3>
+                        ${sectionsHtml}
+                    </div>
+                `;
+            }
+            loadingDiv.style.display = 'none';
+            form.style.display = 'block';
+        }
+
+        // --- OBTENER DATOS ACTUALES ---
+        async function fetchCurrentCourses() {
+            try {
+                const response = await fetch(API_URL_GET, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    renderCourses(data);
+                } else {
+                    errorDiv.textContent = `Error al cargar datos: ${data.message || 'Error desconocido'}`;
+                    errorDiv.style.display = 'block';
+                    loadingDiv.style.display = 'none';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Error de conexión con el servidor de cursos.';
+                errorDiv.style.display = 'block';
+                loadingDiv.style.display = 'none';
+                console.error('Error:', error);
+            }
+        }
+        
+        // --- MANEJADOR DEL FORMULARIO ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            messageDiv.textContent = 'Guardando cambios...';
+            messageDiv.style.color = 'blue';
+
+            // 1. Reconstruir el objeto de cursos con los nuevos URLs
+            const updatedCourses = JSON.parse(JSON.stringify(currentCoursesData)); // Clonar la estructura
+            const inputs = coursesContainer.querySelectorAll('input[type="url"]');
+            
+            inputs.forEach(input => {
+                const yearKey = input.getAttribute('data-year');
+                const sectionKey = input.getAttribute('data-section-key');
+                const newUrl = input.value;
+                
+                if (updatedCourses[yearKey] && updatedCourses[yearKey].sections[sectionKey]) {
+                    updatedCourses[yearKey].sections[sectionKey].url = newUrl;
+                }
+            });
+            
+            // 2. Enviar los datos actualizados al servidor
+            try {
+                const response = await fetch(API_URL_UPDATE, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify(updatedCourses)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = `✅ ${data.message}`;
+                    messageDiv.style.color = 'green';
+                    // Almacenar la nueva estructura por si se necesita en el cliente
+                    currentCoursesData = data.courses; 
+                } else {
+                    messageDiv.textContent = `❌ Error: ${data.message || 'Error al actualizar los enlaces.'}`;
+                    messageDiv.style.color = 'red';
+                }
+            } catch (error) {
+                messageDiv.textContent = '❌ Error de conexión al intentar guardar.';
+                messageDiv.style.color = 'red';
+                console.error('Error:', error);
+            }
+        });
+
+        fetchCurrentCourses();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Cursos - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; background-color: #f4f4f4; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 90%; max-width: 1200px; margin-top: 20px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .back-link { display: block; text-align: center; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
+        #loading { text-align: center; padding: 20px; }
+        #message { margin-top: 15px; text-align: center; font-weight: bold; padding: 10px; border-radius: 4px; }
+        
+        .user-table-container { overflow-x: auto; margin-top: 20px; }
+        .user-table { width: 100%; border-collapse: collapse; }
+        .user-table th, .user-table td { border: 1px solid #ddd; padding: 12px 8px; text-align: left; vertical-align: middle; }
+        .user-table th { background-color: #0078D4; color: white; font-size: 0.9em; }
+        .user-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .user-table tr:hover { background-color: #f0f8ff; }
+
+        .user-info { font-weight: bold; color: #333; }
+        .user-email { font-size: 0.9em; color: #666; }
+        .user-role-admin { color: #D13438; font-weight: bold; }
+
+        /* Estilo para los checkboxes dentro de las celdas */
+        .course-checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .course-checkbox-group label { white-space: nowrap; font-size: 0.85em; cursor: pointer; display: flex; align-items: center; gap: 4px;}
+        
+        .save-button { 
+            background-color: #4CAF50; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; 
+            transition: background-color 0.2s; margin-top: 5px;
+        }
+        .save-button:hover { background-color: #45a049; }
+        .save-button:disabled { background-color: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="perfil.html" class="back-link">&lt; Volver al Perfil</a>
+    <h2>Asignación de Cursos y Secciones a Docentes (Admin)</h2>
+    
+    <div id="loading">Cargando datos de usuarios y cursos...</div>
+    <div id="message"></div>
+    
+    <div class="user-table-container">
+        <table id="userCourseTable" class="user-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Docente / Rol</th>
+                    <th id="coursesHeader">Cursos Disponibles (Seleccionar para Asignar)</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingDiv = document.getElementById('loading');
+        const messageDiv = document.getElementById('message');
+        const table = document.getElementById('userCourseTable');
+        const tableBody = document.getElementById('tableBody');
+        
+        const API_URL_USERS = 'http://localhost:5000/api/users';
+        const API_URL_COURSES = 'http://localhost:5000/api/courses';
+
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+
+        let allUsers = [];
+        let allCoursesFlat = []; // Lista plana de {key: "1a", name: "Primer Año - Sección A"}
+
+        // 1. Verificación de Seguridad
+        if (!token || role !== 'admin') {
+            alert('Acceso denegado. Solo administradores.');
+            window.location.href = 'perfil.html';
+            return;
+        }
+
+        // --- FUNCIONES DE LECTURA DE DATOS ---
+        async function fetchAllData() {
+            try {
+                const headers = { 'Authorization': `Bearer ${token}` };
+
+                // 1. Obtener lista de usuarios
+                const usersResponse = await fetch(API_URL_USERS, { method: 'GET', headers });
+                const usersData = await usersResponse.json();
+
+                // 2. Obtener estructura de cursos
+                const coursesResponse = await fetch(API_URL_COURSES, { method: 'GET', headers });
+                const coursesData = await coursesResponse.json();
+
+                if (!usersResponse.ok || !coursesResponse.ok) {
+                    throw new Error(usersData.message || coursesData.message || 'Error al obtener datos del servidor.');
+                }
+
+                allUsers = usersData;
+                allCoursesFlat = flattenCourses(coursesData);
+                
+                renderTable();
+
+            } catch (error) {
+                loadingDiv.textContent = `Error al cargar datos: ${error.message}`;
+                loadingDiv.style.color = 'red';
+                console.error('Error:', error);
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+
+        // Convierte la estructura de cursos anidada en una lista plana y fácil de usar.
+        function flattenCourses(courses) {
+            const flatList = [];
+            for (const yearKey in courses) {
+                const year = courses[yearKey].year;
+                for (const sectionKey in courses[yearKey].sections) {
+                    const sectionName = courses[yearKey].sections[sectionKey].name;
+                    flatList.push({
+                        key: sectionKey,
+                        name: `${year} - ${sectionName}`
+                    });
+                }
+            }
+            return flatList;
+        }
+
+        // --- FUNCIONES DE RENDERIZADO ---
+        function renderTable() {
+            tableBody.innerHTML = '';
+            table.style.display = 'table';
+            
+            allUsers.forEach(user => {
+                const row = tableBody.insertRow();
+                
+                // Columna 1: ID
+                row.insertCell().textContent = user.id;
+
+                // Columna 2: Info de Usuario
+                const userInfoCell = row.insertCell();
+                userInfoCell.innerHTML = `<div class="user-info">${user.name}</div><div class="user-email">${user.email}</div>`;
+                if (user.role === 'admin') {
+                    userInfoCell.innerHTML += `<div class="user-role-admin">(${user.role.toUpperCase()})</div>`;
+                }
+
+                // Columna 3: Checkboxes de Cursos
+                const coursesCell = row.insertCell();
+                coursesCell.innerHTML = renderCheckboxes(user);
+
+                // Columna 4: Botón de Guardar
+                const actionCell = row.insertCell();
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Guardar Asignación';
+                saveButton.className = 'save-button';
+                saveButton.disabled = user.role === 'admin'; // Deshabilitar asignación al propio admin si se desea
+                saveButton.onclick = () => saveUserCourses(user.id, saveButton);
+                actionCell.appendChild(saveButton);
+            });
+        }
+
+        function renderCheckboxes(user) {
+            let html = '<div class="course-checkbox-group">';
+            
+            allCoursesFlat.forEach(course => {
+                const isAssigned = user.courses.includes(course.key);
+                // Si el usuario es administrador, no permitimos cambiar sus asignaciones (para no perder acceso accidentalmente)
+                const isDisabled = user.role === 'admin'; 
+                
+                html += `
+                    <label>
+                        <input type="checkbox" 
+                            id="check-${user.id}-${course.key}" 
+                            data-user-id="${user.id}"
+                            data-course-key="${course.key}"
+                            ${isAssigned ? 'checked' : ''}
+                            ${isDisabled ? 'disabled' : ''}
+                        >
+                        ${course.name}
+                    </label>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+
+        // --- FUNCIÓN DE GUARDADO (PUT a la API) ---
+        async function saveUserCourses(userId, button) {
+            button.disabled = true;
+            button.textContent = 'Guardando...';
+            messageDiv.textContent = '';
+            messageDiv.style.backgroundColor = 'transparent';
+
+            // 1. Recolectar las nuevas asignaciones
+            const checkboxes = document.querySelectorAll(`input[data-user-id="${userId}"]:checked`);
+            const newAssignedCourses = Array.from(checkboxes).map(cb => cb.getAttribute('data-course-key'));
+
+            // 2. Enviar la solicitud PUT
+            try {
+                const response = await fetch(`${API_URL_USERS}/${userId}/courses`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ courses: newAssignedCourses })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = `✅ Cursos de ${data.user.name} actualizados con éxito.`;
+                    messageDiv.style.backgroundColor = '#d4edda'; // Color verde claro
+                    
+                    // Opcional: Actualizar el array allUsers para reflejar el cambio sin recargar
+                    const userIndex = allUsers.findIndex(u => u.id === userId);
+                    if (userIndex !== -1) {
+                         allUsers[userIndex].courses = newAssignedCourses;
+                    }
+                } else {
+                    throw new Error(data.message || 'Error al actualizar las asignaciones.');
+                }
+            } catch (error) {
+                messageDiv.textContent = `❌ Error al guardar: ${error.message}`;
+                messageDiv.style.backgroundColor = '#f8d7da'; // Color rojo claro
+                console.error('Error:', error);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Guardar Asignación';
+            }
+        }
+
+        fetchAllData();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1765199257314,
+        "name": "Admin Principal",
+        "email": "admin@gmail.com",
+        "password": "admin123",
+        "role": "admin",
+        "createdAt": "2025-12-08T13:07:37.314Z"
+    },
+    {
+        "id": 1765201077818,
+        "name": "Luis Casadiego",
+        "email": "luiscasa2202@gmail.com",
+        "password": "220211",
+        "role": "usuario",
+        "createdAt": "2025-12-08T13:37:57.818Z",
+        "courses": [
+            "1a",
+            "1b",
+            "1c",
+            "2a",
+            "2b",
+            "2c",
+            "3a",
+            "3b",
+            "3c",
+            "4a",
+            "4b",
+            "4c",
+            "5a",
+            "5b"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Laczarcas",
+        "email": "carlocasa09@gmail.com",
+        "password": "V34001968",
+        "role": "usuario",
+        "courses": [
+            "1a",
+            "1b",
+            "1c",
+            "2a",
+            "2b",
+            "2c",
+            "3a",
+            "3b",
+            "3c",
+            "4a",
+            "4b",
+            "4c",
+            "5a",
+            "5b"
+        ]
+    }
+]
