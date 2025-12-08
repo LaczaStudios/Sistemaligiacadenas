@@ -53,5 +53,16 @@
             "5a",
             "5b"
         ]
+    },
+    {
+        "id": 1765213406033,
+        "name": "Luis Casadiego",
+        "email": "casadiegozerpaluisalejandro@gmail.com",
+        "password": "V34001968",
+        "role": "usuario",
+        "courses": [
+            "1a",
+            "5b"
+        ]
     }
 ]
