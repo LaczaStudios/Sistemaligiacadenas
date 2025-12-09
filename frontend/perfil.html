@@ -418,11 +418,13 @@
                 const headers = { 'Authorization': `Bearer ${token}` };
 
                 // A. Perfil (incluye el array de cursos asignados)
-                const profileResponse = await fetch(API_URL_PROFILE, { method: 'GET', headers });
+                // CORRECCIÓN: Se añade el endpoint /api/auth
+                const profileResponse = await fetch(`${API_URL_PROFILE}/api/auth`, { method: 'GET', headers });
                 const profileData = await profileResponse.json();
 
                 // B. Estructura completa de Cursos 
-                const coursesResponse = await fetch(API_URL_COURSES, { method: 'GET', headers });
+                // CORRECCIÓN: Se añade el endpoint /api/courses
+                const coursesResponse = await fetch(`${API_URL_COURSES}/api/courses`, { method: 'GET', headers });
                 const coursesData = await coursesResponse.json();
 
                 if (!profileResponse.ok) {

@@ -215,7 +215,8 @@
                 loginMessage.style.color = 'blue';
 
                 try {
-                    const response = await fetch(API_URL, {
+                    // CORRECCIÓN: Se añade el endpoint /api/auth/login a la URL base
+                    const response = await fetch(`${API_URL}/api/auth/login`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

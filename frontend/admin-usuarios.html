@@ -89,11 +89,13 @@
                 const headers = { 'Authorization': `Bearer ${token}` };
 
                 // 1. Obtener lista de usuarios
-                const usersResponse = await fetch(API_URL_USERS, { method: 'GET', headers });
+                // CORRECCIÓN: Se añade el endpoint /api/users
+                const usersResponse = await fetch(`${API_URL_USERS}/api/users`, { method: 'GET', headers });
                 const usersData = await usersResponse.json();
 
                 // 2. Obtener estructura de cursos
-                const coursesResponse = await fetch(API_URL_COURSES, { method: 'GET', headers });
+                // CORRECCIÓN: Se añade el endpoint /api/courses
+                const coursesResponse = await fetch(`${API_URL_COURSES}/api/courses`, { method: 'GET', headers });
                 const coursesData = await coursesResponse.json();
 
                 if (!usersResponse.ok || !coursesResponse.ok) {
@@ -203,7 +205,8 @@
 
             // 2. Enviar la solicitud PUT
             try {
-                const response = await fetch(`${API_URL_USERS}/${userId}/courses`, {
+                // CORRECCIÓN: Se añade el endpoint /api/users antes del userId
+                const response = await fetch(`${API_URL_USERS}/api/users/${userId}/courses`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

@@ -69,7 +69,8 @@
             const role = document.getElementById('role').value;
 
             try {
-                const response = await fetch(API_URL, {
+                // CORRECCIÓN: Se añade el endpoint /api/users
+                const response = await fetch(`${API_URL}/api/users`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
