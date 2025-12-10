@@ -10,8 +10,19 @@ const userManagementRoutes = require('./routes/userManagementRoutes'); // GESTI�
 const app = express();
 
 // --- Middleware ---
-// Permite solicitudes CORS
-app.use(cors()); 
+
+// La URL de tu dominio de Netlify (Esto soluciona el error CORS)
+const allowedOrigin = 'https://sistemanota.netlify.app';
+
+// Configuración de CORS para permitir solo tu dominio de frontend
+const corsOptions = {
+    origin: allowedOrigin,
+    optionsSuccessStatus: 200 
+};
+
+// Permite solicitudes CORS (usando la configuración específica)
+app.use(cors(corsOptions)); 
+
 // Permite al servidor leer JSON
 app.use(express.json()); 
 

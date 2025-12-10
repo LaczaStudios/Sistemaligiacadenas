@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 
+// 💡 CORRECCIÓN CRÍTICA: Leer la clave secreta de las variables de entorno (Render)
+const JWT_SECRET = process.env.JWT_SECRET || '0ca1ab53a90503cfa6b021197cdd6681';
+
 // RUTA CORREGIDA: Desde /middleware/authMiddleware.js, 
 // un '..' lleva a /backend, y de ahí bajamos a /data/users.json
 const usersFilePath = path.join(__dirname, '..', 'data', 'users.json');
@@ -27,7 +30,8 @@ const protect = (req, res, next) => {
         try {
             token = req.headers.authorization.split(' ')[1];
 
-            const decoded = jwt.verify(token, 'tu_clave_secreta_aqui'); 
+            // AHORA USA JWT_SECRET
+            const decoded = jwt.verify(token, JWT_SECRET); 
             
             const users = readUsers();
             req.user = users.find(u => u.id === decoded.id);

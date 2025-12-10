@@ -7,6 +7,9 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+// 💡 CORRECCIÓN CRÍTICA: Leer la clave secreta de las variables de entorno (Render)
+const JWT_SECRET = process.env.JWT_SECRET || '0ca1ab53a90503cfa6b021197cdd6681'; 
+
 // Ruta relativa desde /routes a /data
 const usersFilePath = path.join(__dirname, '..', 'data', 'users.json');
 
@@ -29,8 +32,9 @@ const writeUsers = (users) => {
 };
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, 'tu_clave_secreta_aqui', {
-        expiresIn: '7d',
+    // AHORA USA JWT_SECRET
+ return jwt.sign({ id }, JWT_SECRET, {
+ expiresIn: '7d',
     });
 };
 
