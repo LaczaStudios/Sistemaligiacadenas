@@ -17,406 +17,465 @@
         --ms-gray-border: #edebe9; /* Color de borde y separadores */
         --ms-text-dark: #323130; /* Texto oscuro principal */
         --ms-text-light: #605e5c; /* Texto secundario (gris) */
-        --ms-red: #C50F1F; /* Rojo para errores */
+        --ms-red: #D13438; /* Rojo - Usado para alertar/admin */
         --card-background: #ffffff;
-        --shadow-subtle: 0 4px 8px rgba(0, 0, 0, 0.05);
+        /* Sombra mejorada para un efecto más flotante */
+        --shadow-elevated: 0 8px 16px rgba(0, 0, 0, 0.1); 
     }
-    
-    /* --- 2. BASE Y ESTRUCTURA --- */
-    body {
-        font-family: 'Poppins', sans-serif;
-        background-color: var(--ms-gray-light);
-        color: var(--ms-text-dark);
-        margin: 0;
+
+    /* --- 2. BASE: BODY, TIPOGRAFÍA Y ENLACES --- */
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        margin: 0; 
+        background-color: var(--ms-gray-light); 
+        color: var(--ms-text-dark); 
+        line-height: 1.6;
+        font-size: 15px; 
         min-height: 100vh;
-        display: flex;
+        display: flex; 
         flex-direction: column;
     }
     
-    /* Contenedor principal que centra el contenido */
-    .main-container {
-        display: flex;
-        flex-grow: 1;
-        width: 100%;
-        max-width: 1200px; /* Ancho máximo para el contenido */
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    /* --- 3. BARRA LATERAL (NAV) --- */
-    .sidebar {
-        width: 250px;
-        min-width: 250px;
-        background-color: var(--card-background);
-        box-shadow: var(--shadow-subtle);
-        padding: 20px 0;
-        border-radius: 8px;
-        margin-right: 20px;
-        align-self: flex-start; /* Se ajusta a la altura del contenido */
-        height: fit-content;
-    }
-    
-    .sidebar h2 {
-        font-size: 1.2rem;
-        text-align: center;
-        margin-bottom: 25px;
-        color: var(--ms-blue);
-        border-bottom: 1px solid var(--ms-gray-border);
-        padding-bottom: 10px;
-    }
-    
-    .sidebar-menu a {
-        display: flex;
-        align-items: center;
-        padding: 12px 25px;
-        color: var(--ms-text-dark);
+    a {
         text-decoration: none;
-        font-weight: 500;
-        transition: background-color 0.2s, color 0.2s;
-        border-left: 4px solid transparent;
-    }
-    
-    .sidebar-menu a i {
-        margin-right: 15px;
-        font-size: 1.1rem;
-    }
-    
-    .sidebar-menu a:hover {
-        background-color: var(--ms-blue-light);
         color: var(--ms-blue);
+        transition: color 0.2s;
+    }
+    a:hover {
+        color: var(--ms-blue-hover);
     }
     
-    .sidebar-menu a.active {
-        background-color: var(--ms-blue-light);
-        color: var(--ms-blue);
-        border-left: 4px solid var(--ms-blue);
-        font-weight: 600;
+    .main-layout { 
+        display: flex; 
+        flex-grow: 1; 
     }
+
+    /* --- 3. LAYOUT PRINCIPAL (HEADER) --- */
     
-    .sidebar-menu hr {
-        border: none;
-        border-top: 1px solid var(--ms-gray-border);
-        margin: 15px 0;
+    .header { 
+        background-color: var(--card-background);
+        height: 60px; 
+        padding: 0 25px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        border-bottom: 1px solid var(--ms-gray-border);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        flex-shrink: 0;
+    }
+    .header h3 { 
+        margin: 0; 
+        font-size: 1.2em; 
+        font-weight: 700; 
+        color: var(--ms-blue); 
+    }
+    .user-menu { display: flex; align-items: center; gap: 10px; }
+    
+    .profile-info { 
+        padding: 8px 10px; border-radius: 4px;
+        transition: background-color 0.2s; 
+        text-align: right;
+    }
+    .profile-info:hover { background-color: var(--ms-gray-border); }
+    .profile-text { display: block; font-weight: 400; color: var(--ms-text-light); font-size: 0.8em; line-height: 1;}
+    .profile-name { font-weight: 600; color: var(--ms-text-dark); font-size: 0.95em; line-height: 1.2;}
+    
+    .user-menu a#logoutButton, .user-menu a.admin {
+        font-weight: 500; padding: 8px 12px; border-radius: 4px;
+        color: var(--ms-text-dark);
+        display: flex; align-items: center; gap: 5px;
+        white-space: nowrap; 
+    }
+    .user-menu a#logoutButton:hover, .user-menu a.admin:hover {
+        background-color: var(--ms-gray-border);
     }
     
     /* --- 4. CONTENIDO PRINCIPAL --- */
+    
     .content-area {
         flex-grow: 1;
+        padding: 40px;
+        overflow-y: auto;
     }
     
     .profile-card {
         background-color: var(--card-background);
-        padding: 30px;
+        padding: 40px;
         border-radius: 8px;
-        box-shadow: var(--shadow-subtle);
-        margin-bottom: 20px;
-    }
-    
-    .profile-card h1 {
-        font-size: 2rem;
-        color: var(--ms-blue);
-        margin-top: 0;
-        border-bottom: 2px solid var(--ms-gray-border);
-        padding-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .profile-info p {
-        font-size: 1.1rem;
-        margin: 10px 0;
-    }
-    
-    .profile-info strong {
-        font-weight: 600;
-        color: var(--ms-text-dark);
-        display: inline-block;
-        width: 120px;
-    }
-    
-    /* Cursos Asignados */
-    .courses-card {
-        background-color: var(--card-background);
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: var(--shadow-subtle);
-    }
-    
-    .courses-card h2 {
-        font-size: 1.5rem;
-        color: var(--ms-text-dark);
-        border-bottom: 1px solid var(--ms-gray-border);
-        padding-bottom: 10px;
-        margin-top: 0;
-        margin-bottom: 20px;
-    }
-    
-    .course-list {
-        list-style: none;
-        padding: 0;
-    }
-    
-    .course-list li {
-        padding: 10px 0;
-        border-bottom: 1px dashed var(--ms-gray-border);
-        font-weight: 500;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .course-list li:last-child {
-        border-bottom: none;
-    }
-    
-    .course-list li a {
-        color: var(--ms-blue);
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-    
-    .course-list li a:hover {
-        color: var(--ms-blue-hover);
-        text-decoration: underline;
-    }
-    
-    .course-list li span {
-        font-size: 0.9rem;
-        color: var(--ms-text-light);
-    }
-    
-    .logout-button {
-        background-color: var(--ms-red);
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: background-color 0.2s;
-        font-size: 0.9rem;
-    }
-    
-    .logout-button:hover {
-        background-color: #9e0c1b;
+        box-shadow: var(--shadow-elevated); 
+        border: 1px solid var(--ms-gray-border);
+        margin: 0 auto;
+        max-width: 900px; 
     }
 
-    /* Estilos para el indicador de Rol (Admin) */
-    #roleDisplay {
-        font-size: 0.9rem;
+    .section-title-profile { 
+        color: var(--ms-blue);
+        font-size: 1.6em;
         font-weight: 700;
-        color: var(--ms-blue);
-        background-color: var(--ms-blue-light);
-        padding: 5px 10px;
-        border-radius: 4px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--ms-blue-light); 
+        padding-bottom: 10px;
+        display: flex; align-items: center;
+    }
+    .section-title-profile i { margin-right: 10px; color: var(--ms-blue); font-size: 1.1em; }
+    .section-title-profile:first-child { margin-top: 0; }
+
+    /* Detalle de Docente (Card interior) */
+    .profile-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid var(--ms-gray-border);
+        border-radius: 6px;
+        background-color: var(--ms-blue-light); 
+    }
+    .detail-item {
+        display: flex;
+        align-items: center;
+        line-height: 1.4;
+        font-size: 1em;
+        color: var(--ms-text-dark);
+    }
+    .detail-item i { margin-right: 10px; color: var(--ms-blue); font-size: 1.1em; }
+    .detail-item strong {
+        display: inline-block;
+        width: 100px; 
+        font-weight: 600;
+        color: var(--ms-text-dark);
+        margin-right: 5px;
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-        .main-container {
-            flex-direction: column;
-            padding: 10px;
+    /* Cursos Agrupados (Listas) */
+    .course-group {
+        margin-bottom: 30px;
+        border-left: 5px solid var(--ms-blue); 
+        padding: 15px 0 15px 0; 
+        background-color: var(--card-background);
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .course-group-title {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: var(--ms-text-dark);
+        margin-bottom: 10px;
+        padding: 0 20px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    
+    .course-list-main {
+        list-style: none;
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    .course-list-main li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ms-gray-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95em;
+        font-weight: 500;
+        flex-wrap: wrap; 
+        gap: 10px; 
+    }
+    .course-list-main li:last-child { border-bottom: none; padding-bottom: 0; }
+
+    /* Estilo de Botón Primario (Aplicado a Registrar Notas y Botones Admin) */
+    .btn-primary {
+        background-color: var(--ms-blue);
+        color: white;
+        padding: 10px 20px; 
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em; 
+        font-weight: 600;
+        transition: background-color 0.2s, transform 0.1s;
+        display: block;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .btn-primary:hover {
+        background-color: var(--ms-blue-hover);
+        transform: translateY(-1px);
+    }
+
+    .course-list-main a {
+        /* Estilos específicos para los botones dentro de la lista de cursos */
+        font-weight: 600;
+        padding: 8px 15px; /* Ajuste para que se vea mejor en la lista */
+        background-color: var(--ms-blue);
+        color: white;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    /* --- 5. OPCIONES DE ADMINISTRACIÓN --- */
+
+    .admin-options {
+        margin-top: 40px; 
+        border-top: 1px solid var(--ms-gray-border);
+        padding-top: 20px;
+    }
+    .admin-buttons-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap; 
+    }
+    /* Estilos específicos para los botones dentro del contenedor de administración */
+    .admin-buttons-container .btn-primary {
+        width: auto;
+        margin-top: 0;
+        padding: 12px 20px; /* Un poco más grandes que los de la lista de cursos */
+        display: inline-block; /* Permite que estén en línea con el flexbox */
+        max-width: 300px;
+        white-space: nowrap; /* Evita que el texto del botón se rompa */
+    }
+
+
+    /* --- 6. MEDIA QUERY: VISTA DE ESCRITORIO (>= 768px) --- */
+    @media (min-width: 768px) {
+        .profile-details {
+            grid-template-columns: repeat(2, 1fr);
         }
-        .sidebar {
-            width: 100%;
-            margin-right: 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        .detail-item strong {
+            width: 100px; 
         }
-        .sidebar-menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        
+        .course-list-main li {
+            flex-wrap: nowrap; 
+            gap: 0;
         }
-        .sidebar-menu a {
-            flex: 1 1 auto;
-            max-width: 150px;
-            justify-content: center;
-            border-left: none;
-            border-top: 4px solid transparent;
-            text-align: center;
-        }
-        .sidebar-menu a.active {
-             border-left: none;
-             border-top: 4px solid var(--ms-blue);
+        
+        .admin-options .btn-primary {
+            width: auto;
+            margin: 10px 0;
         }
     }
 
-    </style>
+</style>
 </head>
 <body>
 
-    <div class="main-container">
-        
-        <aside class="sidebar">
-            <h2><i class="fas fa-graduation-cap"></i> Gestión Docente</h2>
-            <nav class="sidebar-menu">
-                <a href="perfil.html" class="active"><i class="fas fa-user-circle"></i> Mi Perfil</a>
-                
-                <hr>
-
-                <div id="adminLinksContainer" style="display: none;">
-                    <a href="admin-registro.html"><i class="fas fa-user-plus"></i> Registrar Usuario</a>
-                    <a href="admin-usuarios.html"><i class="fas fa-users-cog"></i> Asignar Cursos</a>
-                    <a href="admin-cursos.html"><i class="fas fa-book"></i> Gestionar Cursos</a>
-                    <hr>
-                </div>
-                
-                <a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-            </nav>
-        </aside>
-
-        <main class="content-area">
+    <div class="header">
+        <h3><i class="fas fa-school"></i> Plataforma Docente</h3>
+        <div class="user-menu">
             
-            <div class="profile-card">
-                <h1>
-                    <span>Datos Personales</span>
-                    <span id="roleDisplay">Cargando...</span>
-                </h1>
-                <div class="profile-info">
-                    <p><strong>Nombre:</strong> <span id="userName">Cargando...</span></p>
-                    <p><strong>Email:</strong> <span id="userEmail">Cargando...</span></p>
-                    <p><strong>Rol:</strong> <span id="userRole">Cargando...</span></p>
-                </div>
+            <div class="profile-info">
+                <span class="profile-text">Bienvenido(a):</span>
+                <span id="welcomeMessage" class="profile-name"></span>
             </div>
-
-            <div class="courses-card">
-                <h2>Cursos Asignados</h2>
-                <ul class="course-list" id="coursesList">
-                    <li>Cargando cursos...</li>
-                </ul>
-            </div>
-
-        </main>
+            
+            <a href="admin-registro.html" id="adminLink" class="admin" style="display:none;" title="Registrar Nuevo Usuario"><i class="fas fa-user-shield"></i> Registrar Usuario</a>
+            
+            <a href="#" id="logoutButton" title="Cerrar sesión de forma segura"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
     </div>
 
-<script>
-    // URL base de tu API en Render
-    const API_BASE_URL = 'https://sistema-notas-api-u32a.onrender.com'; 
+    <div class="main-layout">
+        <div class="content-area" id="main-content">
+            
+            <div class="profile-card">
+                
+                <h2 class="section-title-profile"><i class="fas fa-id-card"></i> Información del Docente</h2>
+                
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <i class="fas fa-user"></i>
+                        <strong>Nombre:</strong> <span id="profileName">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <strong>Correo:</strong> <span id="profileEmail">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-briefcase"></i>
+                        <strong>Rol:</strong> <span id="profileRole">Cargando...</span>
+                    </div>
+                    <div class="detail-item">
+                      <i class="fas fa-file-alt">
+                        </i> <a href="https://script.google.com/macros/s/AKfycbzj0UkBbaAGYxTNk8PY04ddAfhPQ5mtqd_5Cm8BJGpGpnfl733kqh_1xBV_ZzyBLHNC_g/exec" target="_blank" title="Generar reporte de notas en una nueva pestaña"> Generar Reporte de Notas</a>
+                    </div>
+                </div>
+
+                <h2 class="section-title-profile"><i class="fas fa-book-open"></i> Cursos Asignados</h2>
+                <div id="courseContentArea">
+                    <p class="loading-message" style="color:var(--ms-text-light); font-style: italic; padding: 10px 0;">Cargando cursos asignados...</p>
+                </div>
+                
+                <div id="adminLinksContainer" class="admin-options" style="display: none;">
+                    <h2 class="section-title-profile" style="color: var(--ms-red); border-bottom-color: var(--ms-red);"><i class="fas fa-user-cog" style="color: var(--ms-red);"></i> Opciones de Administración</h2>
+                    <p style="margin-bottom: 15px; color: var(--ms-text-dark);">Desde aquí puede gestionar las cuentas de usuario, los enlaces y las asignaciones.</p>
+                    
+                    <div class="admin-buttons-container">
+                        <a href="admin-registro.html" class="btn-primary">Registrar Nuevo Usuario</a>
+                        <a href="admin-cursos.html" class="btn-primary">Gestionar Enlaces</a>
+                        <a href="admin-usuarios.html" class="btn-primary">Asignar Cursos a Docentes</a> 
+                        
+                        <a href="admin-toggle-courses.html" class="btn-primary" style="background-color: #0078D4;">Habilitar/Deshabilitar Cursos</a>
+                        
+                        <a href="https://script.google.com/macros/s/AKfycbzlQPMViJCojNtCE32deDLaNn_Xmy3r9rJfadkH4lPpsjUpleWx7bxrSmAFJMgkWRYd/exec" target="_blank" class="btn-primary">Traslado de Estudiantes</a>
+                        <a href="https://script.google.com/macros/s/AKfycbz_IXc-lFh4EX-UoShnDjxhGEWBq-SdR_LBS6zsXvjieiWk_vxc_PmASjj4d0yYuuzl/exec" target="_blank" class="btn-primary">Registro de Estudiantes</a>
+                        <a href="https://script.google.com/macros/s/AKfycbxsTCW7CXdTsM9sGI75vaFFOIKaDx3EaT6S-7kUzasaxLmZmbArZv-KiDkCH-rKH8_F6A/exec" target="_blank" class="btn-primary">Nóminas Para Notas</a>
+                        <a href="https://script.google.com/macros/s/AKfycbz2NyAsmQjVhAnRCJSMNqBFhNnsmcInLdh8veiAXuGUdz1NE5CMZ0q4xMBilDGhoHM/exec" target="_blank" class="btn-primary">Nóminas por Grado y Sección</a> 
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
     
-    // 💡 CORRECCIÓN DE RUTA (Endpoint de perfil)
-    const API_URL_PROFILE = `${API_BASE_URL}/api/auth/profile`; 
-    // Endpoint para cursos (para obtener los nombres completos)
-    const API_URL_COURSES = `${API_BASE_URL}/api/courses`; 
+    <script>
+    // *** 1. CONSTANTES DE CONFIGURACIÓN ***
+    // URL del endpoint de perfil en Render
+    const API_URL_PROFILE = 'https://sistema-notas-api-u32a.onrender.com/api/auth/profile'; 
+    // URL del endpoint de cursos en Render
+    const API_URL_COURSES = 'https://sistema-notas-api-u32a.onrender.com/api/courses'; 
 
-    // *** 1. FUNCIONES AUXILIARES ***
-
-    /**
-     * Muestra los datos del usuario en la tarjeta de perfil.
-     * @param {Object} data - Datos del usuario.
-     */
-    function displayProfileData(data) {
-        document.getElementById('userName').textContent = data.name;
-        document.getElementById('userEmail').textContent = data.email;
-        document.getElementById('userRole').textContent = data.role.toUpperCase();
-        document.getElementById('roleDisplay').textContent = data.role.toUpperCase();
-    }
+    let coursesData = []; 
+    
+    // Función de ayuda para generar la estructura de la lista de cursos (IMPLEMENTACIÓN BÁSICA)
+    const generateCourseStructure = (courses, coursesContainer) => {
+        // Esta función no se usa directamente aquí, pero se mantiene para compatibilidad
+        console.log("Course structure generated:", courses);
+    };
 
     /**
      * Genera la lista de cursos asignados en el HTML.
      * @param {Array<string>} assignedCourses - IDs de los cursos asignados al usuario.
-     * @param {Object} coursesData - Objeto que contiene todos los datos de los cursos por año.
+     * @param {Object} allCourses - Objeto que contiene todos los datos de los cursos por año/sección.
      */
-    function generateProfileCourseList(assignedCourses, coursesData) {
-        const coursesListElement = document.getElementById('coursesList');
-        coursesListElement.innerHTML = ''; // Limpiar la lista
+    const generateProfileCourseList = (assignedCourses, allCourses) => {
+        const coursesContainer = document.getElementById('courseContentArea');
+        coursesContainer.innerHTML = ''; // Limpiar el área
 
-        if (assignedCourses.length === 0) {
-            coursesListElement.innerHTML = '<li>No tiene cursos asignados.</li>';
+        if (!assignedCourses || assignedCourses.length === 0) {
+            coursesContainer.innerHTML = '<p style="color:var(--ms-text-light); font-style: italic; padding: 10px 20px;">No tiene cursos asignados.</p>';
             return;
         }
 
-        let hasContent = false;
-        
+        const groupedCourses = {};
+
         assignedCourses.forEach(courseId => {
-            // Buscamos el curso y la sección en la estructura anidada (coursesData)
-            for (const yearKey in coursesData) {
-                for (const sectionKey in coursesData[yearKey].sections) {
-                    const section = coursesData[yearKey].sections[sectionKey];
+            // Recorrer la estructura de cursos para encontrar la información
+            for (const yearKey in allCourses) {
+                const yearGroup = allCourses[yearKey];
+                for (const sectionKey in yearGroup.sections) {
+                    const section = yearGroup.sections[sectionKey];
                     
                     if (section.id === courseId) {
-                        const listItem = document.createElement('li');
-                        
-                        const link = document.createElement('a');
-                        link.href = section.url || '#'; // Usar la URL si existe, si no, un placeholder
-                        link.target = "_blank";
-                        link.textContent = `${coursesData[yearKey].name} - ${section.name}`;
-                        
-                        const infoSpan = document.createElement('span');
-                        infoSpan.textContent = `(${yearKey}/${sectionKey})`;
-
-                        listItem.appendChild(link);
-                        listItem.appendChild(infoSpan);
-                        coursesListElement.appendChild(listItem);
-                        hasContent = true;
-                        return; // Salir de los bucles una vez encontrado
+                        const groupName = yearGroup.name;
+                        if (!groupedCourses[groupName]) {
+                            groupedCourses[groupName] = [];
+                        }
+                        groupedCourses[groupName].push({
+                            name: section.name,
+                            url: section.url || '#',
+                            details: `(${yearKey} / ${sectionKey})`
+                        });
+                        return;
                     }
                 }
             }
         });
 
-        if (!hasContent) {
-             coursesListElement.innerHTML = '<li>Cursos asignados no encontrados en el catálogo.</li>';
+        // Crear el HTML basado en la agrupación
+        for (const groupName in groupedCourses) {
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'course-group';
+            
+            const title = document.createElement('div');
+            title.className = 'course-group-title';
+            title.innerHTML = `<i class="fas fa-folder-open"></i> ${groupName}`;
+            groupDiv.appendChild(title);
+            
+            const ul = document.createElement('ul');
+            ul.className = 'course-list-main';
+            
+            groupedCourses[groupName].forEach(course => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${course.name} <span style="font-size:0.8em; color: var(--ms-text-light);">${course.details}</span></span>
+                    <a href="${course.url}" target="_blank" class="btn-primary" title="Abrir planilla de notas"><i class="fas fa-external-link-alt"></i> Registrar Notas</a>
+                `;
+                ul.appendChild(li);
+            });
+            
+            groupDiv.appendChild(ul);
+            coursesContainer.appendChild(groupDiv);
         }
-    }
+
+        if (Object.keys(groupedCourses).length === 0) {
+             coursesContainer.innerHTML = '<p style="color:var(--ms-text-dark); font-style: italic; padding: 10px 20px;">Cursos asignados no encontrados en el catálogo.</p>';
+        }
+    };
 
 
-    // *** 2. LÓGICA DE CARGA DE DATOS ***
-
-    /**
-     * Verifica la sesión y carga los datos del perfil y los cursos.
-     */
+    // Función principal para obtener datos del perfil y cursos
     async function fetchProfileData() {
         const token = localStorage.getItem('token');
         const adminLinksContainer = document.getElementById('adminLinksContainer');
-        const adminLinkHeader = document.querySelector('.sidebar-menu a[href="admin-registro.html"]');
-        
-        // 1. Verificar Token
+        const adminLinkHeader = document.getElementById('adminLink');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
         if (!token) {
-            alert("Sesión no iniciada. Redirigiendo al login.");
+            alert("No hay sesión activa. Redirigiendo al login.");
             window.location.href = "index.html";
             return;
         }
 
         try {
-            // 2. Obtener Datos del Perfil (Requiere el Token)
+            // 1. Obtener datos del Perfil (Usuario)
             const profileResponse = await fetch(API_URL_PROFILE, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Enviar el token para autenticación
-                }
+                    'Authorization': `Bearer ${token}` 
+                },
             });
-
-            // Si la respuesta no es 200 (OK), lanzamos un error (ej. 401 Unauthorized)
-            if (!profileResponse.ok) {
-                // Esto ocurrirá si el token es inválido, expirado o el middleware falla
-                const errorData = await profileResponse.json();
-                throw new Error(errorData.message || 'Error de autenticación');
+            
+            // Si falla la autenticación (token inválido o expirado)
+            if (profileResponse.status === 401) {
+                // Aquí usamos la lógica de error que solicitaste
+                throw new Error("Token fallido o expirado (401)");
             }
 
+            if (!profileResponse.ok) {
+                const errorData = await profileResponse.json();
+                throw new Error(errorData.message || 'Error al obtener datos del perfil.');
+            }
+            
             const profileData = await profileResponse.json();
             
-            // 3. Obtener Datos del Catálogo de Cursos (No requiere token si la ruta no está protegida, pero lo enviamos por si acaso)
+            // 2. Obtener la lista completa de Cursos (Catálogo)
             const coursesResponse = await fetch(API_URL_COURSES, {
                 method: 'GET',
-                 headers: {
-                    'Content-Type': 'application/json',
+                headers: {
                     'Authorization': `Bearer ${token}` 
                 }
             });
 
             if (!coursesResponse.ok) {
-                 throw new Error('Error al cargar el catálogo de cursos');
+                 throw new Error('Error al obtener la lista de cursos completa.');
             }
-
-            const coursesData = await coursesResponse.json();
-
-            // 4. Mostrar Datos del Perfil y Lógica de Admin
-            displayProfileData(profileData);
             
-            // Mostrar enlaces de administración si el rol es 'admin'
+            coursesData = await coursesResponse.json(); 
+
+            // 3. Rellenar Información del Perfil
+            document.getElementById('profileName').textContent = profileData.name;
+            document.getElementById('profileEmail').textContent = profileData.email;
+            document.getElementById('profileRole').textContent = profileData.role.toUpperCase();
+            welcomeMessage.textContent = profileData.name.split(' ')[0]; // Muestra solo el primer nombre
+            
+            // 4. Mostrar enlaces de Admin si es necesario
             if (profileData.role === 'admin') {
                 if(adminLinksContainer) adminLinksContainer.style.display = 'block';
                 if(adminLinkHeader) adminLinkHeader.style.display = 'inline-block';
@@ -453,6 +512,5 @@
         });
     });
 </script>
-
 </body>
 </html>
